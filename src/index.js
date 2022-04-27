@@ -113,7 +113,10 @@ class Game extends React.Component {
         if (winner) {
             status = "Winner: " + winner;
         } else {
-            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+            if (this.state.stepNumber === 9) // 追加
+                status = 'Result:draw';
+            else
+                status = 'Next player:' + (this.state.xIsNext ? 'X' : 'O');
         }
 
         return (
@@ -136,7 +139,7 @@ class Game extends React.Component {
 
 // ========================================
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+ReactDOM.render(<Game/>, document.getElementById("root"));
 
 function calculateWinner(squares) {
     const lines = [
