@@ -51,3 +51,6 @@ ol, ul {
 .highlight-color {
   background: #CC99FF;
 }
+li.active button {
+  font-weight: bold;
+}
