@@ -62,7 +62,11 @@ class Game extends React.Component {
                 }
             ],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
+            clickPosition: {    //追加
+                col: null,
+                row: null
+            }
         };
     }
 
@@ -74,6 +78,7 @@ class Game extends React.Component {
             return;
         }
         squares[i] = this.state.xIsNext ? "X" : "O";
+        const position = getPosition(i);    // 追加
         this.setState({
             history: history.concat([
                 {
@@ -81,7 +86,8 @@ class Game extends React.Component {
                 }
             ]),
             stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
+            xIsNext: !this.state.xIsNext,
+            clickPosition: position    // 追加
         });
     }
 
@@ -129,9 +135,11 @@ class Game extends React.Component {
                     />
                 </div>
                 <div className="game-info">
+                    <div>col:{this.state.clickPosition.col}, row:{this.state.clickPosition.row}</div>
                     <div>{status}</div>
                     <ol>{moves}</ol>
                 </div>
+
             </div>
         );
     }
@@ -165,4 +173,16 @@ function calculateWinner(squares) {
         'winner': null,
         'line': null
     };
+}
+function getPosition(index) {
+    let pos = [];
+    for (let row = 1; row <= 3; row++) {
+        for (let col = 1; col <= 3; col++) {
+            pos.push({
+                row: row,
+                col: col
+            });
+        }
+    }
+    return pos[index];
 }
