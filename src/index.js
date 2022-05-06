@@ -59,6 +59,7 @@ class Game extends React.Component {
                     squares: Array(9).fill(null)
                 }
             ],
+            order: 'asc',
             stepNumber: 0,
             xIsNext: true,
             clickPosition: {    //追加
@@ -88,6 +89,12 @@ class Game extends React.Component {
             clickPosition: position    // 追加
         });
     }
+    handleChange() {
+        const order = this.state.order === 'asc' ? 'desc' : 'asc';
+        this.setState({
+            order: order
+        });
+    }
 
     jumpTo(step) {
         this.setState({
@@ -102,7 +109,7 @@ class Game extends React.Component {
         const win = calculateWinner(current.squares);
         const winner = win.winner;
         const line = win.line;
-        const moves = history.map((step, move) => {
+        let moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move :
                 'Go to game start';
@@ -128,7 +135,9 @@ class Game extends React.Component {
             else
                 status = 'Next player:' + (this.state.xIsNext ? 'X' : 'O');
         }
-
+        if (this.state.order === 'desc') {  // 追加
+            moves = moves.reverse();
+        }
         return (
             <div className="game">
                 <div className="game-board">
@@ -139,16 +148,34 @@ class Game extends React.Component {
                     />
                 </div>
                 <div className="game-info">
+                    <Toggle
+                        order={this.state.order}
+                        onChange={() => this.handleChange()}
+                    />
                     <div>col:{this.state.clickPosition.col}, row:{this.state.clickPosition.row}</div>
                     <div>{status}</div>
                     <ol>{moves}</ol>
                 </div>
-
             </div>
         );
     }
 }
 
+class Toggle extends React.Component {
+    render() {
+        return (
+            <div className="toggle">
+                <span>History order:&nbsp;</span>
+                <input type="radio" name="order" id="asc" value="asc" checked={this.props.order === 'asc'}
+                       onChange={() => this.props.onChange()}/>
+                <label htmlFor="asc" className="switch-on">ASC</label>
+                <input type="radio" name="order" id="desc" value="desc" checked={this.props.order === 'desc'}
+                       onChange={() => this.props.onChange()}/>
+                <label htmlFor="desc" className="switch-off">DESC</label>
+            </div>
+        )
+    }
+}
 // ========================================
 
 ReactDOM.render(<Game/>, document.getElementById("root"));
