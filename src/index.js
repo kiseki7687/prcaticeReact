@@ -28,25 +28,23 @@ class Board extends React.Component {
             />
         );
     }
-
+    createBoardHtml() {    // 追加
+        let square, div = [];
+        let num = 0;
+        for (let i = 0; i < 3; i++) {
+            square = [];
+            for (let j = 0; j < 3; j++) {
+                num = 3 * i + j;
+                square.push(this.renderSquare(num));
+            }
+            div.push(<div className="board-row" key={i}>{square}</div>);
+        }
+        return div;
+    }
     render() {
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {this.createBoardHtml()/*修正*/}
             </div>
         );
     }
